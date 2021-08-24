@@ -41,7 +41,8 @@ The "Cells Plots" folder includes all the plots of the clustered cells of the pr
 
 ## "Results" folder
 In the "Plots" folder there are all the final plots of the markers metrics, that one can find also in the paper.
-In the "Tables" folder there are all the tables with the results of the metrics calculations.
+
+In the "Tables" folder there are all the tables with the results of the metrics calculations. One can easily load them on R.
 
 
 

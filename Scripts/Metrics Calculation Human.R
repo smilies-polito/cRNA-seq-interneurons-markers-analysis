@@ -1,3 +1,8 @@
+
+########################
+######################## AT THE END OF THE SCRIPT THERE ARE SOME FUNCTION TO DEFINE BEFORE STARTING
+########################
+
 library(monocle3)
 library(Seurat)
 library(SeuratObject)
@@ -42,6 +47,7 @@ Num_expr <- GG@rowRanges@elementMetadata@listData[["num_cells_expressed"]]
 
 ############# here one needs to manually set all the four cluster derived from the clustering processing
 ############# as one cluster, beacuse we want to calculate metrics on all the interneurons as a whole
+############# if one emploies the processed dataset provided, one can look at the file "Processed datasets cluster numbers" to know the clusters numbers.
 GG@clusters@listData[["UMAP"]][["clusters"]] <- recode_factor(GG@clusters@listData[["UMAP"]][["clusters"]], 
                                                               "20" = "4",
                                                               "7" = "4",
@@ -261,6 +267,30 @@ score_HUMAN <- rbind(Gad_scores_HUMAN_spec, MGE_score_spec_HUMAN, PSVL_score_HUM
 
 
 final_scores_HUMAN <- merge.data.frame(INF_HUMAN, score_HUMAN, by.x = c("Geni", "dataset", "cluster"), by.y = c("rowname","dataset", "cell_group"))
+
+
+
+############### plotting
+
+ggplot(final_scores_HUMAN, aes(x = specificity , y = fraction_expressing)) + geom_point(aes(color = dataset, size = mean_expression)) + geom_text(aes(label = Geni),hjust=-0.2, vjust=-0.2, size = 5) +
+  labs(x = "Specificity", y = "Fraction Expressing", size = "Mean Expression", color = "Dataset", title = "Specificity-Fraction Plot", legend.text=element_text(size=13)) +
+  theme(plot.title = element_text(size = 18, face = "bold", hjust = 0.5), legend.title=element_text(size=18), legend.text=element_text(size=16), axis.title = element_text(size=18), axis.text = element_text(size=13))
+
+
+ggplot(final_scores_HUMAN, aes(x = gain , y = Imp_red)) + geom_point(aes(color = dataset)) + geom_text(aes(label = Geni),hjust=-0.2, vjust=-0.2, size = 5) +
+  labs(x = "Information Gain", y = "Impurity Reduction", color = "Dataset", title = "IG-IR Plot", legend.text=element_text(size=13)) +
+  theme(plot.title = element_text(size = 18, face = "bold", hjust = 0.5), legend.title=element_text(size=18), legend.text=element_text(size=16), axis.title = element_text(size=18), axis.text = element_text(size=13))
+
+
+ggplot(final_scores_HUMAN, aes(x =  marker_score , y = gain)) + geom_point(aes(color = dataset)) + geom_text(aes(label = Geni),hjust=-0.2, vjust=-0.2, size = 5) +
+  labs(x = "Marker Score", y = "Information Gain", color = "Dataset", title = "Marker Score-IG Plot", legend.text=element_text(size=13)) +
+  theme(plot.title = element_text(size = 18, face = "bold", hjust = 0.5), legend.title=element_text(size=18), legend.text=element_text(size=16), axis.title = element_text(size=18), axis.text = element_text(size=13))
+
+
+ggplot(final_scores_HUMAN, aes(x =  marker_score , y = log(mean_expression))) + geom_point(aes(color = dataset)) + geom_text(aes(label = Geni),hjust=-0.2, vjust=-0.2, size = 5) +
+  labs(x = "Marker Score", y = "Mean Expression", color = "Dataset", title = "Marker Score-Mean Expression Plot", legend.text=element_text(size=13)) +
+  theme(plot.title = element_text(size = 18, face = "bold", hjust = 0.5), legend.title=element_text(size=18), legend.text=element_text(size=16), axis.title = element_text(size=18), axis.text = element_text(size=13))
+
 
 
 

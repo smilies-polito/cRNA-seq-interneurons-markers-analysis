@@ -1,3 +1,8 @@
+
+########################
+######################## AT THE END OF THE SCRIPT THERE ARE SOME FUNCTION TO DEFINE BEFORE STARTING
+########################
+
 library(monocle3)
 library(Seurat)
 library(SeuratObject)
@@ -270,6 +275,30 @@ score_Mouse <- rbind(Gad_scores_Mouse_spec, MGE_score_spec_Mouse, PSVL_score_Mou
 
 
 final_scores_MOUSE <- merge.data.frame(INF_Mouse, score_Mouse, by.x = c("Geni", "dataset", "cluster"), by.y = c("rowname","dataset", "cell_group"))
+
+############# plotting
+
+############### plotting
+
+ggplot(final_scores_MOUSE, aes(x = specificity , y = fraction_expressing)) + geom_point(aes(color = dataset, size = mean_expression)) + geom_text(aes(label = Geni),hjust=-0.2, vjust=-0.2, size = 5) +
+  labs(x = "Specificity", y = "Fraction Expressing", size = "Mean Expression", color = "Dataset", title = "Specificity-Fraction Plot", legend.text=element_text(size=13)) +
+  theme(plot.title = element_text(size = 18, face = "bold", hjust = 0.5), legend.title=element_text(size=18), legend.text=element_text(size=16), axis.title = element_text(size=18), axis.text = element_text(size=13))
+
+
+ggplot(final_scores_MOUSE, aes(x = gain , y = Imp_red)) + geom_point(aes(color = dataset)) + geom_text(aes(label = Geni),hjust=-0.2, vjust=-0.2, size = 5) +
+  labs(x = "Information Gain", y = "Impurity Reduction", color = "Dataset", title = "IG-IR Plot", legend.text=element_text(size=13)) +
+  theme(plot.title = element_text(size = 18, face = "bold", hjust = 0.5), legend.title=element_text(size=18), legend.text=element_text(size=16), axis.title = element_text(size=18), axis.text = element_text(size=13))
+
+
+ggplot(final_scores_MOUSE, aes(x =  marker_score , y = gain)) + geom_point(aes(color = dataset)) + geom_text(aes(label = Geni),hjust=-0.2, vjust=-0.2, size = 5) +
+  labs(x = "Marker Score", y = "Information Gain", color = "Dataset", title = "Marker Score-IG Plot", legend.text=element_text(size=13)) +
+  theme(plot.title = element_text(size = 18, face = "bold", hjust = 0.5), legend.title=element_text(size=18), legend.text=element_text(size=16), axis.title = element_text(size=18), axis.text = element_text(size=13))
+
+
+ggplot(final_scores_MOUSE, aes(x =  marker_score , y = log(mean_expression))) + geom_point(aes(color = dataset)) + geom_text(aes(label = Geni),hjust=-0.2, vjust=-0.2, size = 5) +
+  labs(x = "Marker Score", y = "Mean Expression", color = "Dataset", title = "Marker Score-Mean Expression Plot", legend.text=element_text(size=13)) +
+  theme(plot.title = element_text(size = 18, face = "bold", hjust = 0.5), legend.title=element_text(size=18), legend.text=element_text(size=16), axis.title = element_text(size=18), axis.text = element_text(size=13))
+
 
 
 

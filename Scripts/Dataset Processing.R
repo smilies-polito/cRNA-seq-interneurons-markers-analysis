@@ -24,7 +24,7 @@ allen_human_AccCDS <- preprocess_cds(allen_human_AccCDS, method = "LSI")
 allen_human_AccCDS <- reduce_dimension(allen_human_AccCDS, reduction_method = 'UMAP', preprocess_method = "LSI")
 allen_human_AccCDS <- cluster_cells(allen_human_AccCDS, resolution = 2.5e-4)
 
-plot_cells(allen_human_AccCDS)
+plot_cells(allen_human_AccCDS, group_label_size = 5)
 
 rowData(allen_human_AccCDS)$gene_short_name <- rownames(rowData(allen_human_AccCDS))
 plot_cells(allen_human_AccCDS, genes = "GAD2")
@@ -57,13 +57,13 @@ colData(allen_humanCDS)$clus <- cell_allen$cluster
 
 
 # this commands are for plotting the results
-plot_cells(allen_humanCDS)
+plot_cells(allen_humanCDS, group_label_size = 5)
 
 # this command puts the genes names in a partciular column of the rowData to allow the visualization of gene expression
 rowData(allen_humanCDS)$gene_short_name <- rownames(rowData(allen_humanCDS))
 plot_cells(allen_humanCDS, genes = "GAD2")
 
-saveRDS(allen_human_AccCDS, "C:/Users/loren/single cell/Processed CDS/allen_human_MTG")
+saveRDS(allen_humanCDS, "C:/Users/loren/single cell/Processed CDS/allen_human_MTG")
 
 ############
 
@@ -86,7 +86,7 @@ allen_human_VispCDS <- preprocess_cds(allen_human_VispCDS, method = "LSI")
 allen_human_VispCDS <- reduce_dimension(allen_human_VispCDS, reduction_method = 'UMAP', preprocess_method = "LSI")
 allen_human_VispCDS <- cluster_cells(allen_human_VispCDS, resolution = 1e-3)
 
-plot_cells(allen_human_VispCDS)
+plot_cells(allen_human_VispCDS, group_label_size = 5)
 
 rowData(allen_human_VispCDS)$gene_short_name <- rownames(rowData(allen_human_VispCDS))
 plot_cells(allen_human_VispCDS, genes = "GAD2")
@@ -95,7 +95,7 @@ saveRDS(allen_human_VispCDS, "C:/Users/loren/single cell/Processed CDS/allen_hum
 
 #########################################################
 
-
+allen_brain <- readRDS("C:/Users/loren/single cell/allen_brain.rds")
 allen_brainCDS <- as.cell_data_set(allen_brain)
 
 
@@ -106,13 +106,12 @@ allen_brainCDS <- reduce_dimension(allen_brainCDS, reduction_method = 'UMAP', pr
 allen_brainCDS <- cluster_cells(allen_brainCDS, resolution = 1e-4)
 
 rowData(allen_brainCDS)$gene_short_name <- rownames(rowData(allen_brainCDS))
-plot_cells(allen_brainCDS)
-plot_cells(allen_brainCDS, genes = "Adarb2")
+plot_cells(allen_brainCDS, group_label_size = 5)
+plot_cells(allen_brainCDS, genes = "Lamp5")
 plot_cells(allen_brainCDS, color_cells_by = "partition")
-top_allen_brain <- top_markers(allen_brainCDS)
+#top_allen_brain <- top_markers(allen_brainCDS)
 
 saveRDS(allen_brainCDS, "C:/Users/loren/single cell/Processed CDS/allen_mouse")
-
 
 #######################################
 
@@ -136,12 +135,12 @@ SCP2CDS <- estimate_size_factors(SCP2CDS)
 SCP2CDS <- preprocess_cds(SCP2CDS, method = "LSI")
 
 SCP2CDS <- reduce_dimension(SCP2CDS, preprocess_method = "LSI")
-SCP2CDS <- cluster_cells(SCP2CDS, resolution = 1e-3)
+SCP2CDS <- cluster_cells(SCP2CDS, resolution = 1.1e-3)
 
 rowData(SCP2CDS)$gene_short_name <- rownames(rowData(SCP2CDS))
 #colData(SCP2CDS)$class <- SCP2_metadata$Column5
-plot_cells(SCP2CDS)
-plot_cells(SCP2CDS, genes = "Gad1")
+plot_cells(SCP2CDS,group_label_size = 5)
+plot_cells(SCP2CDS, genes = "Vip")
 #plot_cells(SCP2CDS, color_cells_by = "class")
 
 
@@ -173,8 +172,8 @@ SCP3CDS <- cluster_cells(SCP3CDS, resolution = 1e-3)
 
 rowData(SCP3CDS)$gene_short_name <- rownames(rowData(SCP3CDS))
 #colData(SCP3CDS)$class <- SCP3_metadata$Column5
-plot_cells(SCP3CDS)
-plot_cells(SCP3CDS, genes = "Gad1")
+plot_cells(SCP3CDS, group_label_size = 5)
+plot_cells(SCP3CDS, genes = "Vip")
 #plot_cells(SCP3CDS, color_cells_by = "class")
 
 
@@ -206,8 +205,8 @@ SCP5CDS <- cluster_cells(SCP5CDS, resolution = 2.5e-3)
 
 rowData(SCP5CDS)$gene_short_name <- rownames(rowData(SCP5CDS))
 #colData(SCP5CDS)$class <- SCP5_metadata$Column5
-plot_cells(SCP5CDS)
-plot_cells(SCP5CDS, genes = "Gad1")
+plot_cells(SCP5CDS, group_label_size = 5)
+plot_cells(SCP5CDS, genes = "Vip")
 #plot_cells(SCP5CDS, color_cells_by = "class")
 
 
@@ -240,8 +239,8 @@ SCP6CDS <- cluster_cells(SCP6CDS, resolution = 2.5e-3)
 
 rowData(SCP6CDS)$gene_short_name <- rownames(rowData(SCP6CDS))
 #colData(SCP6CDS)$class <- SCP6_metadata$Column5
-plot_cells(SCP6CDS)
-plot_cells(SCP6CDS, genes = "Gad2")
+plot_cells(SCP6CDS,group_label_size = 5)
+plot_cells(SCP6CDS, genes = "Vip")
 #plot_cells(SCP6CDS, color_cells_by = "class")
 
 saveRDS(SCP6CDS, "C:/Users/loren/single cell/Processed CDS/SCP6")
@@ -268,12 +267,11 @@ cds_rna <- preprocess_cds(cds_rna, method = "LSI")
 
 cds_rna <- reduce_dimension(cds_rna, reduction_method = 'UMAP', 
                             preprocess_method = "LSI")
-cds_rna = cluster_cells(cds_rna, resolution=1e-3)
+cds_rna = cluster_cells(l, resolution=3.1e-3)
 
-plot_cells(cds_rna,reduction_method = 'UMAP')
-plot_cells(cds_rna,genes = "Gad1")
+plot_cells(cds_rna,reduction_method = 'UMAP',group_label_size = 5)
+plot_cells(cds_rna,genes = "Sst")
 
 
 saveRDS(cds_rna, "C:/Users/loren/single cell/Processed CDS/snare_rna")
-
 ###################################

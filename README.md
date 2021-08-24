@@ -26,8 +26,8 @@ As last thing it creates the plots:
 
 ## "DATA" folder
 In the "DATA" folder one can find all the datasets employed in the study. In particular, one can chose between:
-> the original datasets
-> the processed objects
+- the original datasets
+- the processed objects
 
 ### Datasets download links.txt
 In this text file one can find the direct download link to the files

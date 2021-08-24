@@ -1,0 +1,47 @@
+
+Allen datasets are open to download
+
+Allen Human ACC ----- > https://celltypes.brain-map.org/api/v2/well_known_file_download/738609876
+Allen Human MTG ----- > https://celltypes.brain-map.org/api/v2/well_known_file_download/694416044
+Allen Human Visp ---- > https://celltypes.brain-map.org/api/v2/well_known_file_download/738610707
+
+
+The Allen mouse datset can be downloaded as dataset, but also as processed Seurat Object:
+Allen mouse cortex 
+	Dataset ----- > https://celltypes.brain-map.org/api/v2/well_known_file_download/694413985
+			https://celltypes.brain-map.org/api/v2/well_known_file_download/694413179
+	Seurat Obj -- > https://www.dropbox.com/s/kqsy9tvsklbu7c4/allen_brain.rds?dl=0
+
+
+
+Single cell portal datasets are open to download but one needs to be signed in
+
+SCP2 mouse AUD
+	genes ----- > https://singlecell.broadinstitute.org/single_cell/data/public/SCP472/single-nuclei-dataset-auditory-cortex-md721?filename=genes.tsv.gz
+	barcodes -- > https://singlecell.broadinstitute.org/single_cell/data/public/SCP472/single-nuclei-dataset-auditory-cortex-md721?filename=barcodes1.tsv.gz
+	matrix ---- > https://singlecell.broadinstitute.org/single_cell/data/public/SCP472/single-nuclei-dataset-auditory-cortex-md721?filename=expression_matrix.mtx.gz
+SCP3 mouse ORB
+	genes ----- > https://singlecell.broadinstitute.org/single_cell/data/public/SCP477/single-nuclei-dataset-orb-pl-md720-md721?filename=genes.tsv
+	barcodes -- > https://singlecell.broadinstitute.org/single_cell/data/public/SCP477/single-nuclei-dataset-orb-pl-md720-md721?filename=barcodes.tsv
+	matrix ---- > https://singlecell.broadinstitute.org/single_cell/data/public/SCP477/single-nuclei-dataset-orb-pl-md720-md721?filename=gene_sorted-matrix.mtx
+SCP5 mouse Visp
+	genes ----- > https://singlecell.broadinstitute.org/single_cell/data/public/SCP554/single-nuclei-dataset-visp-md700?filename=genes.tsv
+	barcodes -- > https://singlecell.broadinstitute.org/single_cell/data/public/SCP554/single-nuclei-dataset-visp-md700?filename=barcodes.tsv
+	matrix ---- > https://singlecell.broadinstitute.org/single_cell/data/public/SCP554/single-nuclei-dataset-visp-md700?filename=gene_sorted-matrix.mtx
+SCP6 mouse MOP
+	genes ----- > https://singlecell.broadinstitute.org/single_cell/data/public/SCP557/single-nuclei-dataset-mop-11-md705?filename=genes.tsv
+	barcodes -- > https://singlecell.broadinstitute.org/single_cell/data/public/SCP557/single-nuclei-dataset-mop-11-md705?filename=barcodes.tsv
+	matrix ---- > https://singlecell.broadinstitute.org/single_cell/data/public/SCP557/single-nuclei-dataset-mop-11-md705?filename=gene_sorted-matrix.mtx
+
+
+
+
+
+
+SNARE mouse cortex
+	genes ----- > https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE126074&format=file&file=GSE126074%5FAdBrainCortex%5FSNAREseq%5FcDNA%2Egenes%2Etsv%2Egz
+	barcodes -- > https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE126074&format=file&file=GSE126074%5FAdBrainCortex%5FSNAREseq%5FcDNA%2Ebarcodes%2Etsv%2Egz
+	matrix ---- > https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE126074&format=file&file=GSE126074%5FAdBrainCortex%5FSNAREseq%5FcDNA%2Ecounts%2Emtx%2Egz
+
+
+

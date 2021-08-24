@@ -1,0 +1,54 @@
+HUMAN VISP
+9 ----> PVALB
+10 ---> SST
+19 ---> VIP
+21 ---> LAMP5
+
+HUMAN ACC
+
+7/20 ---> PVALB
+4 ------> SST
+1 ------> VIP
+10 -----> LAMP5
+
+HUMAN MTG
+5 ----> PVALB
+6/20 ---->SST
+4 -----> VIP
+7 --> LAMP5
+
+MOUSE ALLEN
+6/20 ---> Pvalb
+4 ---> Sst
+2 ---> Vip
+6 ---> Lamp5
+
+MOUSE AUD
+7 ---> Pvalb
+18 --> Sst
+23 --> Vip
+28 --> Lamp5
+
+MOUSE ORB
+6 ---> Pvalb
+12 --> Sst
+5 ---> Vip
+10 --> Lamp5
+
+MOUSE VISP
+10 ---> Pvalb
+14 ---> Sst
+12 ---> Vip
+15 ---> Lamp5
+
+MOUSE MOP
+5 ---> Pvalb
+6 ---> Sst
+9 ---> Vip
+7 ---> Lamp5
+
+MOUSE SNARE
+17 ---> Pvalb
+22 ---> Sst
+24 ---> Vip
+28 ---> Lamp5

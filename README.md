@@ -11,7 +11,8 @@ In the "Scripts" folder one finds three R scripts:
 This script allow the processing of all the datasets. One needs to change the address of the raw files to load. The scripts firstly create a Seurat Object, since  it is more flexible on the input data, and then it is transformed in a Cell Data Set(CDS, i.e., a Monocle object) through the package "Seurat Wrappers". Then, it is processed with the typical workflow.
 
 ### Metrics Calculation
-It is divided in two, one for mouse datasets and one for human ones, since the genes have different notations, but they are totally equivalent. 
+It is divided in two, one for mouse datasets and one for human ones, since the genes have different notations, but they are totally equivalent.
+
 Firstly, the script needs a processed CDS in input that must be loaded. 
 The script is divided in three blocks, which represent the three levels of resolution explained in the paper. 
 For each level, it creates a subset of the CDS which includes only the markers of the respective level. 

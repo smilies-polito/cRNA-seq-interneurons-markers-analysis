@@ -16,8 +16,10 @@ It is divided in two, one for mouse datasets and one for human ones, since the g
 Firstly, the script needs a processed CDS in input that must be loaded. 
 The script is divided in three blocks, which represent the three levels of resolution explained in the paper. 
 For each level, it creates a subset of the CDS which includes only the markers of the respective level. 
+
 Then, one needs to rename the interneurons clusters accordingly to the level. This means that, for example, if one consider the first level where we want to analyze all the interneuron cells together, one must to rename the four cluster representing the subgroups with a univocal name. This step must be performed manually by the user. To facilitate it, it is provided the file "Processed datasets cluster numbers.txt" which includes, for each one of the datasets processed, the association of cluster and respective interneuron subgroup.
-Then, the scripts calculates all the metrics, and create a final table with the list of markers and for each one all the related results and save it on a file.
+
+Then, the scripts calculates all the metrics, and creates a final table with the list of markers and for each one all the related results and saves it on a file.
 As last thing it creates the plots:
 - Specificity-Fraction Expressing
 - Information Gain-Impurity Reduction

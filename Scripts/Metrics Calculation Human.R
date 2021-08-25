@@ -1,8 +1,4 @@
 
-########################
-######################## AT THE END OF THE SCRIPT THERE ARE SOME FUNCTION TO DEFINE BEFORE STARTING
-########################
-
 library(monocle3)
 library(Seurat)
 library(SeuratObject)
@@ -11,7 +7,108 @@ library(dplyr)
 library(Matrix)
 library(aricode)
 
+############################# Functions Definitions ###############
 
+specificity_matrix <- function(agg_expr_matrix, cores=1){
+  specificity_mat <-
+    pbmcapply::pbmclapply(row.names(agg_expr_matrix),
+                          FUN = function(x) {
+                            agg_exprs = as.numeric(agg_expr_matrix[x,])
+                            agg_exprs = makeprobsvec(agg_exprs)
+                            perfect_spec_matrix = diag(ncol(agg_expr_matrix))
+                            sapply(1:ncol(agg_expr_matrix), function(col_idx) {
+                              1 - JSdistVec(agg_exprs,
+                                            perfect_spec_matrix[,col_idx])
+                            })
+                          }, mc.cores=cores,
+                          ignore.interactive = TRUE)
+  specificity_mat = do.call(rbind, specificity_mat)
+  colnames(specificity_mat) = colnames(agg_expr_matrix)
+  row.names(specificity_mat) = row.names(agg_expr_matrix)
+  return(specificity_mat)
+  #
+}
+
+JSdistVec <- function (p, q)
+{
+  JSdiv <- shannon.entropy((p + q)/2) - (shannon.entropy(p) +
+                                           shannon.entropy(q)) * 0.5
+  JSdiv[is.infinite(JSdiv)] <- 1
+  JSdiv[JSdiv < 0] <- 0
+  JSdist <- sqrt(JSdiv)
+  JSdist
+}
+
+makeprobsvec <- function(p) {
+  phat <- p/sum(p)
+  phat[is.na(phat)] = 0
+  phat
+}
+
+makeprobs <- function(a) {
+  colSums<-apply(a,2,sum)
+  b <- Matrix::t(Matrix::t(a)/colSums)
+  b[is.na(b)] = 0
+  b
+}
+
+shannon.entropy <- function(p) {
+  if (min(p) < 0 || sum(p) <=0)
+    return(Inf)
+  p.norm <- p[p>0]/sum(p)
+  -sum(log2(p.norm)*p.norm)
+}
+
+gini.index <- function(p){
+  l <- length(p)
+  s <- summary(p)
+  s <- (s/l)^2
+  G <- 1-sum(s)
+  return(G)
+}
+
+score_table <- function(CDS, cell_group_df)
+{
+  cluster_binary_exprs = as.matrix(aggregate_gene_expression(CDS, cell_group_df = cell_group_df, norm_method = "binary"))
+  
+  cluster_mean_exprs = as.matrix(aggregate_gene_expression(CDS, 
+                                                           cell_group_df = cell_group_df, norm_method = "size_only"))
+  
+  cluster_mean_exprs_value <- cluster_mean_exprs/cluster_binary_exprs
+  cluster_mean_exprs_value[cluster_mean_exprs_value == 'NaN'] <- 0
+  
+  cluster_spec_mat = specificity_matrix(cluster_mean_exprs)
+  cluster_marker_score_mat = as.matrix(cluster_binary_exprs * 
+                                         cluster_spec_mat)
+  
+  
+  cluster_marker_score_table = tibble::rownames_to_column(as.data.frame(cluster_marker_score_mat))
+  cluster_marker_score_table = tidyr::gather(cluster_marker_score_table, "cell_group", "marker_score", -rowname)
+  
+  cluster_spec_table = tibble::rownames_to_column(as.data.frame(cluster_spec_mat))
+  cluster_spec_table = tidyr::gather(cluster_spec_table, "cell_group", "specificity", -rowname)
+  
+  cluster_expr_table = tibble::rownames_to_column(as.data.frame(cluster_mean_exprs))
+  cluster_expr_table = tidyr::gather(cluster_expr_table, "cell_group", "mean_expression", -rowname)
+  
+  cluster_expr_val_table = tibble::rownames_to_column(as.data.frame(cluster_mean_exprs_value))
+  cluster_expr_val_table = tidyr::gather(cluster_expr_val_table, "cell_group", "mean_expression_value", -rowname)
+  
+  cluster_fraction_expressing_table = tibble::rownames_to_column(as.data.frame(cluster_binary_exprs))
+  cluster_fraction_expressing_table = tidyr::gather(cluster_fraction_expressing_table, "cell_group", "fraction_expressing", -rowname)
+  
+  
+  cluster_marker_score_table$specificity = cluster_spec_table$specificity
+  cluster_marker_score_table$mean_expression = cluster_expr_table$mean_expression
+  cluster_marker_score_table$fraction_expressing = cluster_fraction_expressing_table$fraction_expressing
+  cluster_marker_score_table$mean_expression_value = cluster_expr_val_table$mean_expression_value
+  
+  return(cluster_marker_score_table)
+  
+}
+
+
+################
 
 
 
@@ -290,113 +387,4 @@ ggplot(final_scores_HUMAN, aes(x =  marker_score , y = gain)) + geom_point(aes(c
 ggplot(final_scores_HUMAN, aes(x =  marker_score , y = log(mean_expression))) + geom_point(aes(color = dataset)) + geom_text(aes(label = Geni),hjust=-0.2, vjust=-0.2, size = 5) +
   labs(x = "Marker Score", y = "Mean Expression", color = "Dataset", title = "Marker Score-Mean Expression Plot", legend.text=element_text(size=13)) +
   theme(plot.title = element_text(size = 18, face = "bold", hjust = 0.5), legend.title=element_text(size=18), legend.text=element_text(size=16), axis.title = element_text(size=18), axis.text = element_text(size=13))
-
-
-
-
-
-
-
-
-############################# Functions Definitions ###############
-
-specificity_matrix <- function(agg_expr_matrix, cores=1){
-  specificity_mat <-
-    pbmcapply::pbmclapply(row.names(agg_expr_matrix),
-                          FUN = function(x) {
-                            agg_exprs = as.numeric(agg_expr_matrix[x,])
-                            agg_exprs = makeprobsvec(agg_exprs)
-                            perfect_spec_matrix = diag(ncol(agg_expr_matrix))
-                            sapply(1:ncol(agg_expr_matrix), function(col_idx) {
-                              1 - JSdistVec(agg_exprs,
-                                            perfect_spec_matrix[,col_idx])
-                            })
-                          }, mc.cores=cores,
-                          ignore.interactive = TRUE)
-  specificity_mat = do.call(rbind, specificity_mat)
-  colnames(specificity_mat) = colnames(agg_expr_matrix)
-  row.names(specificity_mat) = row.names(agg_expr_matrix)
-  return(specificity_mat)
-  #
-}
-
-JSdistVec <- function (p, q)
-{
-  JSdiv <- shannon.entropy((p + q)/2) - (shannon.entropy(p) +
-                                           shannon.entropy(q)) * 0.5
-  JSdiv[is.infinite(JSdiv)] <- 1
-  JSdiv[JSdiv < 0] <- 0
-  JSdist <- sqrt(JSdiv)
-  JSdist
-}
-
-makeprobsvec <- function(p) {
-  phat <- p/sum(p)
-  phat[is.na(phat)] = 0
-  phat
-}
-
-makeprobs <- function(a) {
-  colSums<-apply(a,2,sum)
-  b <- Matrix::t(Matrix::t(a)/colSums)
-  b[is.na(b)] = 0
-  b
-}
-
-shannon.entropy <- function(p) {
-  if (min(p) < 0 || sum(p) <=0)
-    return(Inf)
-  p.norm <- p[p>0]/sum(p)
-  -sum(log2(p.norm)*p.norm)
-}
-
-gini.index <- function(p){
-  l <- length(p)
-  s <- summary(p)
-  s <- (s/l)^2
-  G <- 1-sum(s)
-  return(G)
-}
-
-score_table <- function(CDS, cell_group_df)
-{
-  cluster_binary_exprs = as.matrix(aggregate_gene_expression(CDS, cell_group_df = cell_group_df, norm_method = "binary"))
-  
-  cluster_mean_exprs = as.matrix(aggregate_gene_expression(CDS, 
-                                                           cell_group_df = cell_group_df, norm_method = "size_only"))
-  
-  cluster_mean_exprs_value <- cluster_mean_exprs/cluster_binary_exprs
-  cluster_mean_exprs_value[cluster_mean_exprs_value == 'NaN'] <- 0
-  
-  cluster_spec_mat = specificity_matrix(cluster_mean_exprs)
-  cluster_marker_score_mat = as.matrix(cluster_binary_exprs * 
-                                         cluster_spec_mat)
-  
-  
-  cluster_marker_score_table = tibble::rownames_to_column(as.data.frame(cluster_marker_score_mat))
-  cluster_marker_score_table = tidyr::gather(cluster_marker_score_table, "cell_group", "marker_score", -rowname)
-  
-  cluster_spec_table = tibble::rownames_to_column(as.data.frame(cluster_spec_mat))
-  cluster_spec_table = tidyr::gather(cluster_spec_table, "cell_group", "specificity", -rowname)
-  
-  cluster_expr_table = tibble::rownames_to_column(as.data.frame(cluster_mean_exprs))
-  cluster_expr_table = tidyr::gather(cluster_expr_table, "cell_group", "mean_expression", -rowname)
-  
-  cluster_expr_val_table = tibble::rownames_to_column(as.data.frame(cluster_mean_exprs_value))
-  cluster_expr_val_table = tidyr::gather(cluster_expr_val_table, "cell_group", "mean_expression_value", -rowname)
-  
-  cluster_fraction_expressing_table = tibble::rownames_to_column(as.data.frame(cluster_binary_exprs))
-  cluster_fraction_expressing_table = tidyr::gather(cluster_fraction_expressing_table, "cell_group", "fraction_expressing", -rowname)
-  
-  
-  cluster_marker_score_table$specificity = cluster_spec_table$specificity
-  cluster_marker_score_table$mean_expression = cluster_expr_table$mean_expression
-  cluster_marker_score_table$fraction_expressing = cluster_fraction_expressing_table$fraction_expressing
-  cluster_marker_score_table$mean_expression_value = cluster_expr_val_table$mean_expression_value
-  
-  return(cluster_marker_score_table)
-  
-}
-
-
 
